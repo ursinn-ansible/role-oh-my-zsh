@@ -18,7 +18,7 @@
   args:
     chdir: '~{{ user.username }}'
     creates: '~{{ user.username }}/.oh-my-zsh'
-  with_items: "{{ users }}"
+  with_items: "{{ oh_my_zsh_users }}"
   when: "((user.oh_my_zsh | default({})).install | default(oh_my_zsh_install)) | bool"
   loop_control:
     loop_var: user
@@ -33,7 +33,7 @@
     # for users with insecure umasks (e.g., "002", allowing group writability).
     mode: 'go-w'
     recurse: true
-  with_items: "{{ users }}"
+  with_items: "{{ oh_my_zsh_users }}"
   when: "((user.oh_my_zsh | default({})).install | default(oh_my_zsh_install)) | bool"
   loop_control:
     loop_var: user
@@ -44,7 +44,7 @@
   ansible.builtin.user:
     name: '{{ user.username }}'
     shell: '{{ oh_my_zsh_zsh_path }}'
-  with_items: "{{ users }}"
+  with_items: "{{ oh_my_zsh_users }}"
   when: "((user.oh_my_zsh | default({})).install | default(oh_my_zsh_install)) | bool"
   loop_control:
     loop_var: user
@@ -58,7 +58,7 @@
     dest: '~{{ user.username }}/.zshrc'
     backup: true
     mode: 'u=rw,go=r'
-  with_items: '{{ users }}'
+  with_items: '{{ oh_my_zsh_users }}'
   vars:
     user_oh_my_zsh: '{{ user.oh_my_zsh | default({}) }}'
   when: >-
